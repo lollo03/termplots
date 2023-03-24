@@ -1,71 +1,69 @@
 from typing import List
 
 
-def find(arr: List, num, ndec ,pos):
+def biground(num, roundto):
+    if( num%roundto < roundto/2 ):
+        return round(num - (num%roundto), 8)
+    else:
+        return round(num - (num%roundto) + roundto,8)
+      
+def find(arr: List, num, ystep ,pos):
     ris = -1
     for x in arr:
         try:
-            if(round(x[pos], ndec)==num and ris != -1):
+            if(biground(x[pos], ystep)==num and ris != -1):
                 ris = len(arr)
-            elif(round(x[pos], ndec)==num):
+            elif(biground(x[pos], ystep)==num):
                 ris = arr.index(x)
         except IndexError:
             pass
 
     return ris
         
-
 def frange(start, stop, step=1.0):
     if(start > stop):
         step *= -1
-    curr = float(start)
+    curr = start
     tmp = []
-    while curr > stop:
-        tmp.append(round(curr, 8))
+    while curr >= stop:
+        tmp.append(biground(curr, step))
         curr += step
-    tmp.append(float(stop))
     return tmp
 
-
 def plot(iny: List, ystep=1, lowlim=None, highlim=None, car='*'):
-    ndec = 0
-    if isinstance(ystep, float):
-        ndec = len(str(ystep).split(".")[1])
-            
     if lowlim == None:
-        lowlim = round(min(iny), ndec)-ystep
+        lowlim = biground(min(iny), ystep)
     if highlim == None:
-        highlim = round(max(iny), ndec)+ystep
+        highlim = biground(max(iny), ystep)+ 2*ystep
         
 
+    maxLenY = len(str(biground(min(iny), ystep))) if len(str(biground(min(iny), ystep))) > len(str(biground(max(iny), ystep))) else len(str(biground(max(iny), ystep)))
+
+    
     for y in frange(highlim, lowlim, ystep):
-        if(y >= 0):
-            print(f' {abs(y)}|', end="")
-        else:
-            print(f'{y}|', end="")
+        nSpazi = maxLenY - len(str(abs(y)))
+        print(f'{" "*nSpazi}{abs(y)}|', end="")
+        
 
         if(y == 0):
             for x in iny:
-                if(round(x, ndec) == y):
-                    print(car, end="")
+                if(biground(x, ystep) == y):
+                    print(car, end="-")
                 else:
                     print("--", end="")
         else:
             for x in iny:
-                if(round(x, ndec) == y):
-                    print(car, end="")
+                if(biground(x, ystep) == y):
+                    print(car, end=" ")
                 else:
                     print("  ", end="")
         print("")
+
 
     print()
 
 
 def mplot(iny: List, ystep=1, lowlim=None, highlim=None, car: List = ['*', '#', '@'], labels:List=None):
-
-    ndec = 0
-    if isinstance(ystep, float):
-        ndec = len(str(ystep).split(".")[1])
 
     if lowlim == None:
         for serie in iny:
@@ -73,14 +71,14 @@ def mplot(iny: List, ystep=1, lowlim=None, highlim=None, car: List = ['*', '#', 
                 mymin = min(serie)
             elif(min(serie) < mymin):
                 mymin = min(serie)
-            lowlim = round(mymin, ndec) - ystep
+            lowlim = biground(mymin, ystep) 
     if highlim == None:
         for serie in iny:
             if(iny[0] == serie):
                 mymax = max(serie)
             elif(max(serie) > mymax):
                 mymax = max(serie)
-            highlim = round(mymax,ndec) + ystep
+            highlim = biground(mymax,ystep) + 2*ystep
             
     for serie in iny:
         if(iny[0]== serie):
@@ -88,24 +86,26 @@ def mplot(iny: List, ystep=1, lowlim=None, highlim=None, car: List = ['*', '#', 
         elif(len(serie) > xdim):
             xdim = len(serie)
 
+    for serie in iny:
+        maxLenY = len(str(biground(min(serie), ystep))) if len(str(biground(min(serie), ystep))) > len(str(biground(max(serie), ystep))) else len(str(biground(max(serie), ystep)))
+
+
     for y in frange(highlim, lowlim, ystep):
-        if(y >= 0):
-            print(f' {abs(y)}|', end="")
-        else:
-            print(f'{y}|', end="")
+        nSpazi = maxLenY - len(str(abs(y)))
+        print(f'{" "*nSpazi}{abs(y)}|', end="")
 
        
         if(y == 0):
             for x in range(xdim):
-                if(find(iny, y, ndec ,x) != -1):
-                    print(car[find(iny, y, ndec ,x)], end=" ")
+                if(find(iny, y, ystep ,x) != -1):
+                    print(car[find(iny, y, ystep ,x)], end="-")
                 else:
                     print("--", end="")
             
         else:
             for x in range(xdim):
-                if(find(iny, y, ndec ,x) != -1):
-                    print(car[find(iny, y, ndec ,x)], end=" ")
+                if(find(iny, y, ystep ,x) != -1):
+                    print(car[find(iny, y, ystep ,x)], end=" ")
                 else:
                     print("  ", end="")
         print("")
@@ -117,4 +117,9 @@ def mplot(iny: List, ystep=1, lowlim=None, highlim=None, car: List = ['*', '#', 
             print(f'{car[labels.index(label)]}: {label}')
         print(f'{car[-1]}: overlaps')
 
-    
+
+# Tests...
+#plot([112, 132, 30], ystep=50)
+#plot([0,0.1,0.3], ystep=0.3)
+#plot([-32,-20,0,20,32], ystep=10)
+#mplot([[-32,-20,0],[32,20,0, 112]], ystep=50)
