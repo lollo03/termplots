@@ -25,9 +25,9 @@ Output:
  1.5|        *
  1.0|    *
  0.5|      *
- 0.0|--*------
--0.5|*
--1.0|
+ 0.0|--*-------
+ 0.5|*
+ 1.0|
 ```
 
 ### Multiple plots
@@ -41,13 +41,13 @@ tmp.mplot([[1,0,2], [-1,0,3,0,2,2]], car=['*', '$', '@'], labels=['List 1', 'Lis
 Output:
 
 ```
- 4.0|
- 3.0|    $
- 2.0|    *  $$
- 1.0|*
- 0.0|--@--$----
--1.0|$
--2.0|
+ 4|
+ 3|    $
+ 2|    *   $ $
+ 1|*
+ 0|--@---$-----
+ 1|$
+ 2|
 
 *: List 1
 $: List 2
@@ -70,3 +70,9 @@ $: List 2
 - `highlim`: upper limit of the y axis
 - `car` (default `['*', '#', '@']`): list of point(s) marker, the last char is used for overlaps
 - `labels` (default `None`): list of labels
+
+## Colors
+
+Termplots support up to 6 colors. Colors are automatically assigned to different series.
+
+> I tested the colors only on macOS. If the colors don't work try a different terminal or open an issue

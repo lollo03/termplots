@@ -1,6 +1,5 @@
 from typing import List
 
-
 def biground(num, roundto):
     if( num%roundto < roundto/2 ):
         return round(num - (num%roundto), 8)
@@ -30,6 +29,10 @@ def frange(start, stop, step=1.0):
         curr += step
     return tmp
 
+colors = ["\u001b[31m", '\u001b[32m', '\u001b[33m', '\u001b[34m', '\u001b[35m', '\u001b[36m']
+reset = '\u001b[0m'
+
+
 def plot(iny: List, ystep=1, lowlim=None, highlim=None, car='*'):
     if lowlim == None:
         lowlim = biground(min(iny), ystep)
@@ -48,13 +51,13 @@ def plot(iny: List, ystep=1, lowlim=None, highlim=None, car='*'):
         if(y == 0):
             for x in iny:
                 if(biground(x, ystep) == y):
-                    print(car, end="-")
+                    print(f'{colors[0]}{car}{reset}', end="-")
                 else:
                     print("--", end="")
         else:
             for x in iny:
                 if(biground(x, ystep) == y):
-                    print(car, end=" ")
+                    print(f'{colors[0]}{car}{reset}', end=" ")
                 else:
                     print("  ", end="")
         print("")
@@ -64,6 +67,10 @@ def plot(iny: List, ystep=1, lowlim=None, highlim=None, car='*'):
 
 
 def mplot(iny: List, ystep=1, lowlim=None, highlim=None, car: List = ['*', '#', '@'], labels:List=None):
+
+    if(len(iny) > len(car)):
+        print(f"{colors[0]}ERROR! The number of chars passed in the car list must be greater of the number of lists{reset}")
+        return -1
 
     if lowlim == None:
         for serie in iny:
@@ -97,15 +104,19 @@ def mplot(iny: List, ystep=1, lowlim=None, highlim=None, car: List = ['*', '#', 
        
         if(y == 0):
             for x in range(xdim):
-                if(find(iny, y, ystep ,x) != -1):
-                    print(car[find(iny, y, ystep ,x)], end="-")
+                pos = find(iny, y, ystep ,x)
+                color = colors[pos] if pos<len(colors) else colors[pos-len(colors)] 
+                if(pos != -1):
+                    print(f'{color}{car[pos]}{reset}', end="-")
                 else:
                     print("--", end="")
             
         else:
             for x in range(xdim):
-                if(find(iny, y, ystep ,x) != -1):
-                    print(car[find(iny, y, ystep ,x)], end=" ")
+                pos = find(iny, y, ystep ,x)
+                color = colors[pos] if pos<len(colors) else colors[pos-len(colors)] 
+                if(pos != -1):
+                    print(f'{color}{car[pos]}{reset}', end=" ")
                 else:
                     print("  ", end="")
         print("")
@@ -114,12 +125,20 @@ def mplot(iny: List, ystep=1, lowlim=None, highlim=None, car: List = ['*', '#', 
         
     if (labels != None):
         for label in labels:
-            print(f'{car[labels.index(label)]}: {label}')
-        print(f'{car[-1]}: overlaps')
+            pos = labels.index(label)
+            color = colors[pos] if pos<len(colors) else colors[pos-len(colors)] 
+            print(f'{color}{car[pos]}{reset}: {label}')
+        pos += 1
+        color = colors[pos] if pos<len(colors) else colors[pos-len(colors)] 
+        print(f'{color}{car[-1]}{reset}: overlaps')
+
+
 
 
 # Tests...
 #plot([112, 132, 30], ystep=50)
 #plot([0,0.1,0.3], ystep=0.3)
 #plot([-32,-20,0,20,32], ystep=10)
-#mplot([[-32,-20,0],[32,20,0, 112]], ystep=50)
+#mplot([[-32,-20,0],[32,20,0, 112]], ystep=50, labels=["1", "2"])
+#mplot([[1,0,2], [-1,0,3,0,2,2]], car=['*', '$', '@'], labels=['List 1', 'List 2'])
+
