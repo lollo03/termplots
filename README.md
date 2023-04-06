@@ -35,7 +35,7 @@ Output:
 ```python
 import termplots as tmp
 
-tmp.mplot([[1,0,2], [-1,0,3,0,2,2]], car=['*', '$', '@'], labels=['List 1', 'List 2'])
+tmp.plot([[1,0,2], [-1,0,3,0,2,2]], car=['*', '$', '@'], labels=['List 1', 'List 2'])
 ```
 
 Output:
@@ -54,6 +54,41 @@ $: List 2
 @: overlaps
 ```
 
+### Compact plot
+
+```python
+import termplots as tmp
+tmp.cplot([[32,20,0, 112],[-32,-20,0,20]])
+```
+
+Output:
+
+```
+112|      *
+ 32|*
+ 20|  *   #
+  0|----@---
+ 20|  #
+ 32|#
+```
+
+or
+
+```python
+import termplots as tmp
+tmp.cplot([-3,2,1,15])
+```
+
+Output:
+
+```
+15|      *
+ 2|  *
+ 1|    *
+ 0|--------
+ 3|*
+```
+
 ## Other arguments
 
 ### `plot()`
@@ -61,13 +96,11 @@ $: List 2
 - `ystep` (default `1`): defines steps on the y axis
 - `lowlim`: lower limit of the y axis
 - `highlim`: upper limit of the y axis
-- `car` (default `*`): point(s) marker
+- `car` (default `['*', '#', '@']`): list of point(s) marker, the last char is used for overlaps
+- `labels` (default `None`): list of labels
 
-### `mplot()`
+### `cplot()`
 
-- `ystep` (default `1`): defines steps on the y axis
-- `lowlim`: lower limit of the y axis
-- `highlim`: upper limit of the y axis
 - `car` (default `['*', '#', '@']`): list of point(s) marker, the last char is used for overlaps
 - `labels` (default `None`): list of labels
 
