@@ -178,13 +178,3 @@ def cplot(iny: List,  car: List = ['*', '#', '@'], labels:List=None):
         color = colors[pos] if pos<len(colors) else colors[pos-len(colors)] 
         print(f'{color}{car[-1]}{reset}: overlaps')
 
-# Tests...
-#plot([112, 132, 30], ystep=50)
-#plot([0,0.1,0.3], ystep=0.3)
-#plot([-32,-20,0,20,32], ystep=10)
-#mplot([[-32,-20,0],[32,20,0, 112]], ystep=50, labels=["1", "2"])
-#plot([[1,0,2], [-1,0,3,0,2,2]], car=['*', '$', '@'], labels=['List 1', 'List 2'])
-#plot([1,0,2,-1,0,3,0,2,2], car=['*', '$', '@'], labels=['List 1'])
-#print(getSteps([[32,20,0, 112],[-32,-20,0,20]]))
-cplot([[32,20,0, 112],[-32,-20,0,20]])
-cplot([-3,2,1,15])
